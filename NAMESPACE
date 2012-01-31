@@ -1,0 +1,8 @@
+importFrom(Biobase, selectSome)
+importClassFrom(IRanges, SimpleList)
+
+exportClass("raggedVariantSet")
+
+exportMethods("show")
+
+export(getRVS, getrd)
