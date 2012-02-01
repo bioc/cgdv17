@@ -1,0 +1,147 @@
+
+%
+% NOTE -- ONLY EDIT THE .Rnw FILE!!!  The .tex file is
+% likely to be overwritten.
+%
+
+%\VignetteIndexEntry{}
+%\VignetteDepends{}
+%\VignetteKeywords{}
+%\VignettePackage{}
+
+\documentclass[12pt]{article}
+
+\usepackage{amsmath,pstricks}
+\usepackage[authoryear,round]{natbib}
+\usepackage{hyperref}
+
+
+\textwidth=6.2in
+\textheight=8.5in
+%\parskip=.3cm
+\oddsidemargin=.1in
+\evensidemargin=.1in
+\headheight=-.3in
+
+\newcommand{\scscst}{\scriptscriptstyle}
+\newcommand{\scst}{\scriptstyle}
+
+
+\newcommand{\Rfunction}[1]{{\texttt{#1}}}
+\newcommand{\Robject}[1]{{\texttt{#1}}}
+\newcommand{\Rpackage}[1]{{\textit{#1}}}
+\newcommand{\Rmethod}[1]{{\texttt{#1}}}
+\newcommand{\Rfunarg}[1]{{\texttt{#1}}}
+\newcommand{\Rclass}[1]{{\textit{#1}}}
+
+\textwidth=6.2in
+
+\bibliographystyle{plainnat} 
+ 
+\begin{document}
+%\setkeys{Gin}{width=0.55\textwidth}
+
+\title{Exploring the Complete Genomics Diversity panel}
+\author{VJ Carey}
+
+\maketitle
+
+\section{Introduction}
+
+Complete Genomics Inc. distributes a collection of
+data on deeply sequenced genomes (from
+Coriell cell lines) from 11 different
+human populations.
+
+<<lkd>>=
+library(cgdv17)
+data(popvec)
+popvec[1:5]
+table(popvec)
+@
+
+The data are distributed with many details; VJC obtained
+the masterVar TSV files from the Complete Genomics ftp2 site,
+converted these to VCF 4.0 in Oct. 2011, using a tool
+noted at
+
+\begin{verbatim}
+http://community.completegenomics.com/tools/m/cgtools/219.aspx
+\end{verbatim}
+
+The conversion tool used was released with various caveats.  Perhaps
+the whole conversion should be redone with official tools.
+
+The purpose of this note is to explore some basic structural features
+of the data, so that relevant genetic structures can be identified
+for analytic programming and interpretation.  We focus on variant calls
+on chromosome 17.
+
+Formal restrictions on publications related to these data
+are as follows.
+\begin{verbatim}
+1. The Coriell and ATCC Repository number(s) of the
+cell line(s) or the DNA sample(s) must be cited in
+publication or presentations that are based on the
+use of these materials.
+2. You must reference our Science paper (R. Drmanac,
+et. al. Science 327(5961), 78. [DOI: 10.1126/
+science.1181498])
+3. You must provide the version number of the
+Complete Genomics assembly software with which
+the data was generated. This can be found in the
+header of the summary.tsv file (\# Software_Version).
+\end{verbatim}
+
+
+\section{Contents of a VCF header}
+
+There is a lot of redundancy among the headers for the 46 files,
+so one was isolated for distribution.
+<<lkh>>=
+data(h1)
+h1
+h1[[1]]$Sample
+h1[[1]]$Header$META
+h1[[1]]$Header$INFO
+h1[[1]]$Header$FORMAT
+@
+
+\section{Variant calls for chromosome 17}
+
+We created a provisional container for the call data on chromosome
+17.  Tabix facilities were used to filter and index the data from the
+full VCF to all of chromosome 17.
+
+<<lkd>>=
+rv = getRVS()
+rv
+@
+
+The internal format of serialized variant data is GRanges.
+Data on one individual:
+<<lkd1>>=
+R85 = getrd(rv, "NA06985")
+@
+
+The quality score distribution:
+<<lkd2>>=
+summary(elementMetadata(R85)$QUAL)
+@
+
+What are the types of variant calls with quality scores in the
+top quartile of the score distribution?
+
+<<lkq>>=
+kp = which(elementMetadata(R85)$QUAL >= 166)
+R85hiq = R85[kp]
+refs = elementMetadata(R85hiq)$REF
+alts = elementMetadata(R85hiq)$ALT
+length(refs)
+class(refs)
+class(alts)
+table(nchar(refs))
+modrefind = which(nchar(refs)>=3 & nchar(refs)<=6)
+R85hiq[modrefind][1:5]
+@
+\end{document}
