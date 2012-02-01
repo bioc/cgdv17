@@ -45,6 +45,9 @@
 \author{VJ Carey}
 
 \maketitle
+\tableofcontents
+
+\clearpage
 
 \section{Introduction}
 
@@ -93,6 +96,7 @@ the data was generated. This can be found in the
 header of the summary.tsv file (\# Software_Version).
 \end{verbatim}
 
+\clearpage
 
 \section{Contents of a VCF header}
 
@@ -107,41 +111,115 @@ h1[[1]]$Header$INFO
 h1[[1]]$Header$FORMAT
 @
 
+\clearpage
+
 \section{Variant calls for chromosome 17}
+
+\subsection{Recording structural variation for an individual}
 
 We created a provisional container for the call data on chromosome
 17.  Tabix facilities were used to filter and index the data from the
 full VCF to all of chromosome 17.
 
+At present it is not clear how to model a collection of deeply sequenced chromosomes.
+I have used VariantAnnotation:::readVcf, which must
+be applied separately for each individual, given the
+Complete Genomics distribution.
+The focus is on structural information in the rowData component
+of the VCF object returned by \texttt{readVcf}, which is a GRanges instance.
+From the elementMetadata
+I removed FILTER and added \verb+geno()$GT+
+information.  This gives us information to specific
+variants and phase for some variants, depending on the
+string content of the GT information.
+
+The \texttt{getRVS} function will collect file references for
+the serialized GRanges.
 <<lkd>>=
 rv = getRVS()
 rv
 @
 
-The internal format of serialized variant data is GRanges.
-Data on one individual:
+Data on one individual can be extracted using \texttt{getrd()}.
+We will confine attention to variants with quality score in the
+top quartile of its distribution for this individual.
 <<lkd1>>=
 R85 = getrd(rv, "NA06985")
-@
-
-The quality score distribution:
-<<lkd2>>=
+length(R85)
 summary(elementMetadata(R85)$QUAL)
-@
-
-What are the types of variant calls with quality scores in the
-top quartile of the score distribution?
-
-<<lkq>>=
 kp = which(elementMetadata(R85)$QUAL >= 166)
 R85hiq = R85[kp]
+@
+
+A small excerpt gives us a sense of the sorts of variation
+to be encountered:
+<<lkty>>=
+elementMetadata(R85hiq)[11:20,]
 refs = elementMetadata(R85hiq)$REF
 alts = elementMetadata(R85hiq)$ALT
-length(refs)
-class(refs)
-class(alts)
+genos = elementMetadata(R85hiq)$geno
 table(nchar(refs))
-modrefind = which(nchar(refs)>=3 & nchar(refs)<=6)
-R85hiq[modrefind][1:5]
+alts[grep(",",unlist(alts))]
 @
+
+Summary: references are recorded as DNAStrings, alternatives are compressed
+character strings with commas, and the phasing of the individual-level calls can be
+derived by parsing the \texttt{geno} component.
+
+\subsection{Isolating variants in the vicinity of a gene, for an individual}
+
+We are interested in gene ORMDL3.  We will use the hg19 transcriptDb to
+obtain the locations and tabulate higher quality variants observed 100kb up and
+downstream of the transcript.
+
+<<getlocs>>=
+library(TxDb.Hsapiens.UCSC.hg19.knownGene)
+tx19 = TxDb.Hsapiens.UCSC.hg19.knownGene
+library(org.Hs.eg.db)
+get("ORMDL3", revmap(org.Hs.egSYMBOL))
+ortx = transcriptsBy(tx19, "gene")$"94103"
+seqlevels(R85hiq) = "chr17"
+aro = subsetByOverlaps(R85hiq, ortx+100000)
+table(elementMetadata(aro)$geno)
+alts = unlist(elementMetadata(aro)$ALT)
+alts[nchar(alts)>1]
+@
+
+There are deletion and insertion events, but I don't see any simple
+way of isolating and counting them at the moment.  Some code will
+be added to address this.
+
+We can use VariantAnnotation to obtain structural contexts.
+It takes over a minute to use locateVariants, so I just show the
+code and results here for now.
+
+\begin{verbatim}
+> lvaro = locateVariants(aro, tx19)
+> lvaro[1:4,]
+DataFrame with 4 rows and 5 columns
+    queryID location      txID                    geneID     cdsID
+  <integer> <factor> <integer> <CompressedCharacterList> <integer>
+1         1   intron     60959                     22806    189661
+2         1   intron     60960                     22806    189661
+3         1   intron     60961                     22806    189661
+4         1   intron     60962                     22806    189661
+> table(lvaro$loca,sapply((lvaro$geneID), function(x)strsplit(x, ",")[[1]][1]))
+            
+             124626 1440 22806 284110 2886 55876 5709 94103 9862
+  3'UTR           0    0     0      0    0     0    0     0   20
+  5'UTR           0    0     0      1    0     8    0     0   10
+  coding          0    0     0      6    0     0    0     0   10
+  intergenic     34    1    10      4    1     2   25    10    0
+  intron         28    0   105     42    0   138   99     6    0
+\end{verbatim}
+
+We see that this search for variants near ORMDL3 identifies
+variants affecting other nearby genes.
+
+Further work:  illustrate the predictCoding behavior, 
+streamline the catalog of variants relevant to a given
+gene over the 46 individuals.  Relate to population membership, and, where
+available, to expression variation.
+
+
 \end{document}
