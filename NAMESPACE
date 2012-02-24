@@ -8,4 +8,4 @@ exportClass("raggedVariantSet")
 exportMethods("show", "sampleNames", 
   "variantGRanges")
 
-export(getRVS, getrd, countVariants, variantNames)
+export(getRVS, getrd, countVariants, variantNames, padToReference)
