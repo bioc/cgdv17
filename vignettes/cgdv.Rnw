@@ -136,7 +136,7 @@ string content of the GT information.
 The \texttt{getRVS} function will collect file references for
 the serialized GRanges.
 <<lkd>>=
-rv = getRVS()
+rv = getRVS("cgdv17")
 rv
 @
 
@@ -215,6 +215,87 @@ DataFrame with 4 rows and 5 columns
 
 We see that this search for variants near ORMDL3 identifies
 variants affecting other nearby genes.
+
+\section{Filtering and analyzing variants on multiple individuals}
+
+The analysis of a ragged variant set requires infrastructure.  We
+will illustrate with a focused analysis of variants in the vicinity
+of ORMDL3.  We have used the GGdata and hmyriB36 packages to collect
+expression data on 12 individuals in the diversity cohort, in the
+CY17 smlSet instance.  This includes expression on all genes on chr17, and the HapMap
+phase 2 genotypes as well.
+
+<<getd>>=
+suppressPackageStartupMessages(library(GGtools))
+data(CY17)
+CY17
+sn = sampleNames(CY17)
+@
+
+\subsection{Sample filtering}
+
+The ragged variant set can be filtered to these individuals.
+<<getse>>=
+rv17 = rv[, sn]
+rv17
+@
+
+\subsection{Counting variants in a specified region, with
+  quality filtering}
+
+The variant counting function takes two key parameters in
+addition to the variant set:
+a region within which to count, and a lower bound on call
+quality for retained variants.  A third additional parameter
+tells how to iterate over samples with an lapply-like function.
+
+Since ORMDL3 is on the minus strand, the upstream region is
+to the right.  We will create a region from start site
+to 50k upstream.
+<<lkco,cache=TRUE>>=
+if (length(ortx)>1) ortx = ortx[2]
+ortss = end(ortx)
+ortup50 = GRanges("chr17", IRanges(ortss, width=50000))
+cv50k = countVariants(rv17, ortup50, 160, lapply )
+<<lkcnt>>=
+cv50k
+@
+We see that the second sample seems to have a quality problem.
+We will now drop it from both the expression and variant structures.
+<<drops>>=
+if (length(sampleNames(rv17))==12) rv17 = rv17[,-2]
+if (length(sampleNames(CY17))==12) CY17 = CY17[,-2]
+#redo
+<<doagain,cache=TRUE>>=
+cv50k = countVariants(rv17, ortup50, 160, lapply )
+@
+
+We can acquire the full data on variants in
+the region under the quality constraint using variantGRanges.
+<<lkv,cache=TRUE>>=
+vv50k = variantGRanges( rv17, ortup50, 160, lapply )
+<<domolk>>=
+vv50k[[1]][1:5]
+sapply(vv50k,length)
+@
+
+As a naive hint of a connection of ``variant burden'' with
+ORMDL3 expression, consider the following display.
+<<lkdis,fig=TRUE,keep.source=TRUE>>=
+ORMDL3ex = as.numeric(exprs(CY17[genesym("ORMDL3"),]))
+ygr = ifelse((1:11)<=4, "red", "green")
+plot(ORMDL3ex~cv50k, col=ygr, pch=19, 
+      ylab="variant count from 50kb upstream to TSS")
+legend(10, 8.5, pch=19, col=c("red", "green"), legend=c("CEU", "YRI"))
+summary(lm(ORMDL3ex~cv50k*factor(ygr)))
+@
+
+\subsection{Enumerating variants by structural context}
+
+Now we focus on variants in the ORMDL3 coding region.
+<<purerng>>=
+library(parallel)
+vv = variantGRanges( rv17, ortx, 160, mclapply )
 
 Further work:  illustrate the predictCoding behavior, 
 streamline the catalog of variants relevant to a given

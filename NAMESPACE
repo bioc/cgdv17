@@ -1,8 +1,11 @@
 importFrom(Biobase, selectSome)
+importMethodsFrom(Biobase, sampleNames)
+importMethodsFrom(IRanges, "%in%")
 importClassFrom(IRanges, SimpleList)
 
 exportClass("raggedVariantSet")
 
-exportMethods("show")
+exportMethods("show", "sampleNames", 
+  "variantGRanges")
 
-export(getRVS, getrd)
+export(getRVS, getrd, countVariants, variantNames)
