@@ -293,9 +293,16 @@ summary(lm(ORMDL3ex~cv50k*factor(ygr)))
 \subsection{Enumerating variants by structural context}
 
 Now we focus on variants in the ORMDL3 coding region.
-<<purerng>>=
+<<purerng,cache=TRUE>>=
 library(parallel)
+options(mc.cores=max(c(2, parallel::detectCores()-2)))
 vv = variantGRanges( rv17, ortx, 160, mclapply )
+vvv = lapply(vv, function(x) renameSeqlevels(x, c("17"="chr17")))
+mycache = new.env(hash=TRUE)
+locs = lapply(vvv, function(x) {
+  locateVariants(x, tx19, cache=mycache)
+})
+@
 
 Further work:  illustrate the predictCoding behavior, 
 streamline the catalog of variants relevant to a given
