@@ -194,8 +194,10 @@ It takes over a minute to use locateVariants, so I just show the
 code and results here for now.
 
 \begin{verbatim}
-> lvaro = locateVariants(aro, tx19)
-> lvaro[1:4,]
+mycache = new.env(hash=TRUE)
+lvaro = locateVariants(aro, tx19, cache=mycache)
+lvaro[1:4,]
+table(lvaro$loca,sapply((lvaro$geneID), function(x)strsplit(x, ",")[[1]][1]))
 DataFrame with 4 rows and 5 columns
     queryID location      txID                    geneID     cdsID
   <integer> <factor> <integer> <CompressedCharacterList> <integer>
@@ -203,7 +205,6 @@ DataFrame with 4 rows and 5 columns
 2         1   intron     60960                     22806    189661
 3         1   intron     60961                     22806    189661
 4         1   intron     60962                     22806    189661
-> table(lvaro$loca,sapply((lvaro$geneID), function(x)strsplit(x, ",")[[1]][1]))
             
              124626 1440 22806 284110 2886 55876 5709 94103 9862
   3'UTR           0    0     0      0    0     0    0     0   20
