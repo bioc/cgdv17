@@ -155,14 +155,14 @@ padToReference = function(rv, gr, qthresh=160, applier=lapply) {
       DNAStringSet(x)
       }
    ALT = IRanges:::newCompressedList("DNAStringSetList", DS(ALTIN),end=as.integer(
-         sapply(ALTIN,length)))
+         elementLengths(ALTIN)))
    padmat[ names(curg), i ] = fixup(curg)  # could be done later
    refl[[i]] = REF
    altl[[i]] = ALT
    varnl[[i]] = names(curg)
  }
  refv = unlist(lapply(refl, as.character))
- altv = unlist(lapply(altl, function(x) as.character(unlist(x))))
+ altv = unlist(IRanges::lapply(altl, function(x) as.character(IRanges::unlist(x))))
  names(refv) = unlist(varnl)
  names(altv) = unlist(varnl)
  ref = DNAStringSet( refv[rownames(padmat)] )
