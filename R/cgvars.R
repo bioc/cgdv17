@@ -150,7 +150,7 @@ padToReference = function(rv, gr, qthresh=160, applier=lapply) {
    REF = elementMetadata(vv[[i]])$REF
    ALTIN = elementMetadata(vv[[i]])$ALT
    DS = function(x) {
-      x = unlist(x)
+      x = IRanges::unlist(x)
       if (!all(x %in% c("A", "C", "G", "T"))) x[which(!(x %in% c("A", "C", "G", "T")))] = "N"
       DNAStringSet(x)
       }
