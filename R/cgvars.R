@@ -5,10 +5,11 @@ setMethod("show", "raggedVariantSet", function(object){
  cat("some sampleNames: ", selectSome(gsub(".*(NA.....).*", "\\1", object@filenames)), "\n")
 })
 
-getRVS = function(packname)
+getRVS = function(packname, fns2samplenames = function(x)
+ gsub(".*(NA.....).*", "\\1", x))
  {
  tmp = new("raggedVariantSet", filenames=dir(system.file("rowdata", package=packname), full=TRUE))
- tmp@sampleNames = gsub(".*(NA.....).*", "\\1", tmp@filenames)
+ tmp@sampleNames = fns2samplenames(tmp@filenames)
  names(tmp@filenames) = tmp@sampleNames
  tmp
  }
