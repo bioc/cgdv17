@@ -9,7 +9,7 @@ acquire data for and construct a ragged variant set instance
 }
 \usage{
 getRVS(packname, fns2samplenames = function(x)
- gsub(".*(NA.....).*", "\\1", x))
+ gsub(".*(NA.....).*", "\\\\1", x))
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -49,19 +49,6 @@ VJ Carey <stvjc@channing.harvard.edu>
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-##---- Should be DIRECTLY executable !! ----
-##-- ==>  Define data, use random,
-##--	or do  help(data=index)  for the standard data sets.
-
-## The function is currently defined as
-function (packname) 
-{
-    tmp = new("raggedVariantSet", filenames = dir(system.file("rowdata", 
-        package = packname), full = TRUE))
-    tmp@sampleNames = gsub(".*(NA.....).*", "\\1", tmp@filenames)
-    names(tmp@filenames) = tmp@sampleNames
-    tmp
-  }
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
