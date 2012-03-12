@@ -1,6 +1,6 @@
 Package: cgdv17
 Title: Complete Genomics Diversity Panel, chr17 on 46 individuals
-Version: 0.0.11
+Version: 0.0.12
 Author: VJ Carey <stvjc@channing.harvard.edu>
 Description: Complete Genomics Diversity Panel, chr17 on 46 individuals
 Suggests: 

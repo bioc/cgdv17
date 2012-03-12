@@ -4,10 +4,10 @@
 % likely to be overwritten.
 %
 
-%\VignetteIndexEntry{}
-%\VignetteDepends{}
-%\VignetteKeywords{}
-%\VignettePackage{}
+%\VignetteIndexEntry{cgdv17: extract from Complete Genomics diversity panel}
+%\VignetteDepends{GGtools,TxDb.Hsapiens.UCSC.hg19.knownGene,parallel}
+%\VignetteKeywords{genetic sequencing}
+%\VignettePackage{cgdv17}
 
 \documentclass[12pt]{article}
 \usepackage{auto-pst-pdf}
