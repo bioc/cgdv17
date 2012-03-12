@@ -7,6 +7,7 @@
 \alias{show,raggedVariantSet-method}
 \alias{variantGRanges,raggedVariantSet,GRanges,missing,missing-method}
 \alias{variantGRanges,raggedVariantSet,GRanges,numeric,function-method}
+\alias{variantNames}
 
 \title{Class \code{"raggedVariantSet"}}
 \description{

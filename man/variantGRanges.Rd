@@ -1,5 +1,6 @@
 \name{variantGRanges}
 \alias{variantGRanges}
+\alias{variantNames}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 acquire a list of GRanges recording variants and locations
@@ -9,6 +10,10 @@ acquire a list of GRanges recording variants and locations
 }
 \usage{
 variantGRanges(rvs, delim, qthresh = 160, applier = lapply)
+
+variantNames(rvs, delim, qthresh=160, applier=lapply) 
+}
+
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{

@@ -1,5 +1,6 @@
 \name{getRVS}
 \alias{getRVS}
+\alias{getrd}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
 acquire data for and construct a ragged variant set instance
@@ -10,6 +11,8 @@ acquire data for and construct a ragged variant set instance
 \usage{
 getRVS(packname, fns2samplenames = function(x)
  gsub(".*(NA.....).*", "\\\\1", x))
+
+getrd(x, id)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -18,6 +21,8 @@ string naming package where the resources are found
 }
  \item{fns2samplenames}{function to transform filenames
 to sample name tokens}
+ \item{x}{instance of raggedVariantSet}
+ \item{id}{character to select sample}
 }
 \details{
 currently very specialized, as the  protocol for managing collections
