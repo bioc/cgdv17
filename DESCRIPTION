@@ -1,11 +1,12 @@
 Package: cgdv17
 Title: Complete Genomics Diversity Panel, chr17 on 46 individuals
-Version: 0.0.13
+Version: 0.0.14
 Author: VJ Carey <stvjc@channing.harvard.edu>
 Description: Complete Genomics Diversity Panel, chr17 on 46 individuals
 Suggests: 
 Imports: Biobase, IRanges
-Depends: R (>= 2.14), VariantAnnotation, org.Hs.eg.db, methods
+Depends: R (>= 2.14), VariantAnnotation, org.Hs.eg.db, methods,
+	GGtools, TxDb.Hsapiens.UCSC.hg19.knownGene, parallel
 Maintainer: VJ Carey <stvjc@channing.harvard.edu>
 License: Artistic 2.0
 LazyLoad: yes
