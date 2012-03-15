@@ -14,8 +14,6 @@ variantGRanges(rvs, delim, qthresh = 160, applier = lapply)
 variantNames(rvs, delim, qthresh=160, applier=lapply) 
 }
 
-}
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{rvs}{
 \code{\linkS4class{raggedVariantSet}} instance
