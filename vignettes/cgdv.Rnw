@@ -301,7 +301,7 @@ vv = variantGRanges( rv17, ortx, 160, mclapply )
 vvv = lapply(vv, function(x) renameSeqlevels(x, c("17"="chr17")))
 mycache = new.env(hash=TRUE)
 locs = lapply(vvv, function(x) {
-  locateVariants(x, tx19, cache=mycache)
+  locateVariants(x, tx19, CodingVariants(),cache=mycache)
 })
 @
 
