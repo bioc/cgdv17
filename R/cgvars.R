@@ -91,7 +91,7 @@ setMethod("[", "raggedVariantSet", function(x, i, j, ..., drop=TRUE) {
   nms = sampleNames(rvs)
   ans = applier( nms, function(x) {
     thisrd = getrd(rvs, x)  # GRanges
-    indelim = thisrd[ IRanges::"%in%"(ranges(thisrd), ranges(delim)) ]
+    indelim = thisrd[ IRanges::overlapsAny(ranges(thisrd), ranges(delim)) ]
     curq = elementMetadata(indelim)$QUAL
     indelim[ which(curq >= qthresh) ]
   })
@@ -139,8 +139,8 @@ padToReference = function(rv, gr, qthresh=160, applier=lapply) {
  colnames(padmat) = sampleNames(rv)
  fixup = function(z) {
     z = gsub("\\|", "/", z)
-    if (!all(z %in% c("0/0", "0/1", "1/1", "1/0")))
-      z[!(z %in% c("0/0", "0/1", "1/1", "1/0"))] = "0/0" # NA
+    if (!all(overlapsAny(z , c("0/0", "0/1", "1/1", "1/0"))))
+      z[!(overlapsAny( z , c("0/0", "0/1", "1/1", "1/0")))] = "0/0" # NA
     z
  }
  refl = list()
@@ -152,7 +152,7 @@ padToReference = function(rv, gr, qthresh=160, applier=lapply) {
    ALTIN = elementMetadata(vv[[i]])$ALT
    DS = function(x) {
       x = IRanges::unlist(x)
-      if (!all(x %in% c("A", "C", "G", "T"))) x[which(!(x %in% c("A", "C", "G", "T")))] = "N"
+      if (!all(overlapsAny(x , c("A", "C", "G", "T")))) x[which(!(overlapsAny( x , c("A", "C", "G", "T"))))] = "N"
       DNAStringSet(x)
       }
    ALT = IRanges:::newCompressedList("DNAStringSetList", DS(ALTIN),end=as.integer(
