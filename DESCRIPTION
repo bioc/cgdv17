@@ -4,7 +4,7 @@ Version: 0.3.1
 Author: VJ Carey <stvjc@channing.harvard.edu>
 Description: Complete Genomics Diversity Panel, chr17 on 46 individuals
 Suggests: 
-Imports: Biobase, IRanges
+Imports: Biobase, IRanges, S4Vectors
 Depends: R (>= 2.15), VariantAnnotation, org.Hs.eg.db, methods,
 	GGtools, TxDb.Hsapiens.UCSC.hg19.knownGene, parallel
 Maintainer: VJ Carey <stvjc@channing.harvard.edu>
