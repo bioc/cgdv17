@@ -1,5 +1,4 @@
 import(methods)
-import(parallel)
 import(BiocGenerics)
 import(S4Vectors)
 import(IRanges)
