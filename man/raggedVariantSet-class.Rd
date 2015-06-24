@@ -18,7 +18,7 @@ Objects can be created by calls of the form \code{new("raggedVariantSet", ...)}.
 }
 \section{Slots}{
   \describe{
-    \item{\code{filenames}:}{files will be held in inst/rowdata, named here}
+    \item{\code{filenames}:}{files will be held in inst/rowranges, named here}
     \item{\code{sampleNames}:}{names of samples managed}
   }
 }

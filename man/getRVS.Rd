@@ -28,7 +28,7 @@ to sample name tokens}
 currently very specialized, as the  protocol for managing collections
 of VCF files with discrepant variant sets per subject is not clear
 
-assumes the package has inst/rowdata where row data of 
+assumes the package has inst/rowranges where row ranges of 
 \code{\link[VariantAnnotation]{readVcf}} results are held
 }
 \value{

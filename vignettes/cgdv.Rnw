@@ -125,7 +125,7 @@ At present it is not clear how to model a collection of deeply sequenced chromos
 I have used VariantAnnotation:::readVcf, which must
 be applied separately for each individual, given the
 Complete Genomics distribution.
-The focus is on structural information in the rowData component
+The focus is on structural information in the rowRanges component
 of the VCF object returned by \texttt{readVcf}, which is a GRanges instance.
 From the elementMetadata
 I removed FILTER and added \verb+geno()$GT+

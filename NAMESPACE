@@ -1,7 +1,12 @@
+import(methods)
+import(parallel)
+import(BiocGenerics)
+import(S4Vectors)
+import(IRanges)
+import(GenomicRanges)
+
 importFrom(Biobase, selectSome)
 importMethodsFrom(Biobase, sampleNames)
-importClassFrom(S4Vectors, SimpleList)
-importMethodsFrom(IRanges, "%in%")
 
 exportClass("raggedVariantSet")
 
