@@ -6,6 +6,8 @@ import(GenomicRanges)
 
 importFrom(Biobase, selectSome)
 importMethodsFrom(Biobase, sampleNames)
+importMethodsFrom(S4Vectors, "%in%")
+importClassFrom(S4Vectors, SimpleList)
 
 exportClass("raggedVariantSet")
 

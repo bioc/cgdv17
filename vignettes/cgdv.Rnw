@@ -144,7 +144,7 @@ Data on one individual can be extracted using \texttt{getrd()}.
 We will confine attention to variants with quality score in the
 top quartile of its distribution for this individual.
 <<lkd1>>=
-R85 = getrd(rv, "NA06985")
+R85 = getrd(rv, "NA06985_17")
 length(R85)
 summary(elementMetadata(R85)$QUAL)
 kp = which(elementMetadata(R85)$QUAL >= 166)
