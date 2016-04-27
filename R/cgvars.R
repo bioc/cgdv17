@@ -8,7 +8,7 @@ setMethod("show", "raggedVariantSet", function(object){
 getRVS = function(packname, fns2samplenames = function(x)
  gsub(".*(NA.....).*", "\\1", x))
  {
- tmp = new("raggedVariantSet", filenames=dir(system.file("rowranges", package=packname), full=TRUE))
+ tmp = new("raggedVariantSet", filenames=dir(system.file("rowdata", package=packname), full=TRUE))
  tmp@sampleNames = fns2samplenames(tmp@filenames)
  names(tmp@filenames) = tmp@sampleNames
  tmp
