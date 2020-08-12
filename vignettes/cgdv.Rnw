@@ -10,7 +10,6 @@
 %\VignettePackage{cgdv17}
 
 \documentclass[12pt]{article}
-\usepackage{auto-pst-pdf}
 \usepackage{amsmath,pstricks}
 \usepackage[authoryear,round]{natbib}
 \usepackage{hyperref}
